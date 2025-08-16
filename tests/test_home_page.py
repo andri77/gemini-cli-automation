@@ -49,3 +49,53 @@ def test_acara_logo_visibility_and_navigation(page: Page):
         home_page.acara_logo.click()
     new_page = new_page_info.value
     expect(new_page).to_have_url("https://www.acara.edu.au/")
+
+# New test cases for navigation links
+def test_home_link_navigation(page: Page):
+    home_page = HomePage(page)
+    home_page.navigate()
+    expect(home_page.home_link).to_be_visible()
+    home_page.home_link.click()
+    expect(page).to_have_url("https://www.nap.edu.au/home")
+
+def test_about_link_navigation(page: Page):
+    home_page = HomePage(page)
+    home_page.navigate()
+    expect(home_page.about_link).to_be_visible()
+    home_page.about_link.click()
+    expect(page).to_have_url("https://www.nap.edu.au/about")
+
+def test_naplan_link_navigation(page: Page):
+    home_page = HomePage(page)
+    home_page.navigate()
+    expect(home_page.naplan_link).to_be_visible()
+    home_page.naplan_link.click()
+    expect(page).to_have_url("https://www.nap.edu.au/naplan")
+
+def test_nap_sample_assessments_link_navigation(page: Page):
+    home_page = HomePage(page)
+    home_page.navigate()
+    expect(home_page.nap_sample_assessments_link).to_be_visible()
+    home_page.nap_sample_assessments_link.click()
+    expect(page).to_have_url("https://www.nap.edu.au/nap-sample-assessments")
+
+def test_opt_in_link_navigation(page: Page):
+    home_page = HomePage(page)
+    home_page.navigate()
+    expect(home_page.opt_in_link).to_be_visible()
+    home_page.opt_in_link.click()
+    expect(page).to_have_url("https://www.nap.edu.au/opt-in")
+
+def test_resources_link_navigation(page: Page):
+    home_page = HomePage(page)
+    home_page.navigate()
+    expect(home_page.resources_link).to_be_visible()
+    home_page.resources_link.click()
+    expect(page).to_have_url("https://www.nap.edu.au/resources")
+
+def test_contacts_link_navigation(page: Page):
+    home_page = HomePage(page)
+    home_page.navigate()
+    expect(home_page.contacts_link).to_be_visible()
+    home_page.contacts_link.click()
+    expect(page).to_have_url("https://www.nap.edu.au/contacts")
