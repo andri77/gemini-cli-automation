@@ -98,6 +98,8 @@ pytest MOCK_GEN/tests/
 
 Security and penetration tests are a crucial part of the testing suite, designed to uncover vulnerabilities that could be exploited by malicious actors. These tests specifically target common API security flaws, based on industry best practices like the OWASP API Security Top 10.
 
+### Security-and-penetration-tests
+
 **Types of Vulnerabilities Targeted:**
 
 *   **Injection Flaws (API1:2023):** These tests attempt to inject malicious code (e.g., SQL commands, Cross-Site Scripting (XSS) payloads) into API parameters or request bodies. The goal is to see if the application improperly processes this input, potentially leading to data breaches, unauthorized access, or execution of arbitrary code.
