@@ -4,6 +4,7 @@ from pytest_html import extras
 import os
 import shutil
 import datetime
+import base64
 
 # Global variable to store the screenshot directory
 _screenshot_dir = None
@@ -64,6 +65,8 @@ def pytest_html_results_table_header(cells):
     if duration_index != -1 and links_index != -1:
         cells[duration_index], cells[links_index] = cells[links_index], cells[duration_index]
 
+    cells.append(html.th("Screenshot"))
+
 def pytest_html_results_table_row(report, cells):
     # This hook can be used to add custom data to the results table rows.
     test_type = "N/A"
@@ -77,6 +80,12 @@ def pytest_html_results_table_row(report, cells):
         elif 'performance' in report.keywords:
             test_type = "Performance"
     cells.insert(1, test_type)
+
+    # Add screenshot column for UI tests
+    if 'ui' in report.keywords and hasattr(report, 'screenshot'):
+        cells.append(html.td(html.img(src=f"data:image/png;base64,{report.screenshot}", style="width:200px;height:auto;")))
+    else:
+        cells.append(html.td("")) # Empty cell for non-UI tests or no screenshot
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
@@ -94,11 +103,12 @@ def pytest_runtest_makereport(item, call):
             screenshot_path = os.path.join(_screenshot_dir, screenshot_name)
             try:
                 page.screenshot(path=screenshot_path)
+                # Read the screenshot file and base64 encode it
+                with open(screenshot_path, "rb") as f:
+                    screenshot_data = f.read()
+                encoded_screenshot = base64.b64encode(screenshot_data).decode()
+
                 # Attach screenshot to the report
-                html_path = os.path.relpath(screenshot_path, os.path.dirname(report.nodeid))
-                if hasattr(report, 'extra'):
-                    report.extra.append(extras.png(page.screenshot(path=screenshot_path), f"Screenshot: {screenshot_name}"))
-                else:
-                    report.extra = [extras.png(page.screenshot(path=screenshot_path), f"Screenshot: {screenshot_name}")]
+                report.screenshot = encoded_screenshot # Attach to report object
             except Exception as e:
                 print(f"Failed to take screenshot for {item.name}: {e}")
