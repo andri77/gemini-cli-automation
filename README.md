@@ -81,6 +81,24 @@ pytest API/tests/test_security.py
 
 The `https://fakestoreapi.com/products` API, used for these tests, exhibits some unconventional behavior for certain negative scenarios (e.g., returning `200 OK` for non-existent resources or accepting invalid input). The assertions in `API/tests/test_security.py` have been adjusted to reflect these actual responses, effectively highlighting these behaviors as potential vulnerabilities or unexpected API design choices.
 
+### Running Performance Tests
+
+Performance tests are built using [Locust](https://locust.io/). They simulate user load on the API endpoints to measure performance metrics.
+
+To run the performance tests:
+
+1.  Navigate to the `perf/tests` directory:
+    ```bash
+    cd perf/tests
+    ```
+
+2.  Run Locust:
+    ```bash
+    locust -f locustfile.py --host https://fakestoreapi.com
+    ```
+
+3.  Open your web browser and go to `http://localhost:8089` to access the Locust web UI. From there, you can start the test by specifying the number of users and the spawn rate.
+
 ## Test Design
 
 The tests are designed using the Page Object Model (POM) architecture. This architecture separates the test code from the page-specific code, making the tests more readable, maintainable, and reusable.

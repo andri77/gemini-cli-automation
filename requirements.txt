@@ -1,3 +1,4 @@
 pytest
 pytest-playwright
 pytest-html
+locust
