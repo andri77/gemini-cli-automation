@@ -34,7 +34,7 @@ This project contains Playwright tests for the NAPLAN public demonstration site,
     ```
 
 3.  **Activate the virtual environment:**
-    -   **Windows:**
+    -   **Windows:
         ```bash
         venv\Scripts\activate
         ```
@@ -96,17 +96,29 @@ pytest MOCK_GEN/tests/
 
 ### Running Security and Penetration Tests
 
-These tests are designed to identify potential security vulnerabilities in the API by simulating various attack scenarios and checking for common weaknesses like injection flaws and improper error handling.
+Security and penetration tests are a crucial part of the testing suite, designed to uncover vulnerabilities that could be exploited by malicious actors. These tests specifically target common API security flaws, based on industry best practices like the OWASP API Security Top 10.
 
-To run the security and penetration tests, use the following command:
+**Types of Vulnerabilities Targeted:**
 
-```bash
-pytest API/tests/test_security.py
-```
+*   **Injection Flaws (API1:2023):** These tests attempt to inject malicious code (e.g., SQL commands, Cross-Site Scripting (XSS) payloads) into API parameters or request bodies. The goal is to see if the application improperly processes this input, potentially leading to data breaches, unauthorized access, or execution of arbitrary code.
+    *   **Example:** Injecting `<script>alert('XSS')</script>` into a product title to check for XSS reflection.
+*   **Broken Object Property Level Authorization (BOPLA) / Mass Assignment (API3:2023):** This vulnerability occurs when an API allows a user to modify properties of an object that they should not have access to. Tests simulate attempts to create or update resources with unexpected or unauthorized fields (e.g., trying to set an `isAdmin` flag to `true` when creating a user).
+    *   **Example:** Sending a product creation request with an `isAdmin: true` field to see if the API processes it.
+*   **Unrestricted Resource Consumption (API4:2023):** These tests assess the API's resilience to resource exhaustion attacks. This includes sending:
+    *   **Large Payloads:** Very large JSON payloads in requests to see if the API can handle them efficiently without crashing or timing out.
+    *   **High Request Volumes:** Rapidly sending a large number of requests to check for rate limiting mechanisms and denial-of-service vulnerabilities.
+*   **Improper Error Handling (API7:2023):** Poorly implemented error handling can leak sensitive information (e.g., stack traces, internal server details, database schemas) to attackers. Tests check if error messages reveal too much information when invalid requests are made.
+    *   **Example:** Sending malformed JSON or using unsupported HTTP methods to trigger errors and inspect the response for sensitive data.
+*   **Server-Side Request Forgery (SSRF) (API6:2023):** SSRF vulnerabilities allow an attacker to induce the server-side application to make HTTP requests to an arbitrary domain of the attacker's choosing. Tests simulate providing internal IP addresses or local file paths in URL parameters (e.g., image URLs) to see if the server attempts to access these internal resources.
+    *   **Example:** Providing `http://localhost/admin` as an image URL to see if the server tries to connect to its own admin interface.
+*   **Input Fuzzing:** This involves sending a wide range of unexpected, malformed, or random data to API endpoints to discover vulnerabilities that might not be apparent through standard testing. This can uncover issues like buffer overflows, crashes, or unexpected behavior.
+    *   **Example:** Sending extremely long strings to text fields to see how the API handles them.
+
+The tests in `API/tests/test_security.py` are designed to simulate these scenarios and report on the API's behavior.
 
 **Note on FakeStoreAPI Behavior:**
 
-The `https://fakestoreapi.com/products` API, used for these tests, exhibits some unconventional behavior for certain negative scenarios (e.g., returning `200 OK` for non-existent resources or accepting invalid input). The assertions in `API/tests/test_security.py` have been adjusted to reflect these actual responses, effectively highlighting these behaviors as potential vulnerabilities or unexpected API design choices.
+The `https://fakestoreapi.com/products` API, used for these tests, exhibits some unconventional behavior for certain negative scenarios (e.g., returning `200 OK` for non-existent resources or accepting invalid input). The assertions in `API/tests/test_security.py` have been adjusted to reflect these actual responses, effectively highlighting these behaviors as potential vulnerabilities or unexpected API design choices. For instance, a test might "pass" if an XSS payload is reflected, indicating a successful identification of a vulnerability rather than a functional pass.
 
 ### Running Performance Tests
 
@@ -143,7 +155,7 @@ graph TD
 
 -   **Tests:** The tests are written in Python using the `pytest` framework and the `playwright` library (for UI tests) or `requests` library (for API tests). They are responsible for the test logic, assertions, and orchestrating interactions with the application.
 -   **Page Objects:** Each significant page or component in the application has its own page object file. A page object encapsulates the elements (locators) on that page and the actions (methods) that can be performed on them. This abstraction makes tests less brittle to UI changes.
--   **Pages:** The pages represent the actual web pages or API endpoints of the application under test.
+-   **Pages:** The pages are the actual web pages or API endpoints of the application under test.
 
 The tests use the page objects to interact with the pages and assert the expected behavior. This separation of concerns makes the tests more robust and easier to maintain.
 
@@ -158,25 +170,3 @@ API tests focus on the backend services of the application. They directly send r
 ## Mock API Generator
 
 The Mock API generator is a simple tool that can be used to generate mock APIs for testing purposes. It allows developers and testers to simulate API responses, enabling frontend and backend development to proceed in parallel without waiting for actual API implementations. It can generate mock responses for GET, POST, PUT, and DELETE requests.
-
-## Security and Penetration Tests
-
-Security and penetration tests are a crucial part of the testing suite, designed to uncover vulnerabilities that could be exploited by malicious actors. These tests specifically target common API security flaws, such as:
-
-*   **Injection Flaws:** Attempting to inject malicious code (e.g., SQL, XSS) into input fields to see if the application is vulnerable.
-*   **Broken Authentication/Authorization:** Testing if unauthorized users can access restricted resources or perform actions they shouldn't.
-*   **Improper Error Handling:** Checking if error messages reveal sensitive system information.
-*   **Rate Limiting Issues:** Assessing if the API is susceptible to brute-force attacks or denial-of-service by overwhelming it with requests.
-
-The tests in `API/tests/test_security.py` are designed to simulate these scenarios and report on the API's behavior.
-
-## Performance Tests
-
-Performance tests are essential for evaluating the responsiveness, stability, and scalability of the API under various load conditions. Using Locust, these tests simulate a large number of concurrent users interacting with the API, providing insights into:
-
-*   **Response Times:** How quickly the API responds to requests.
-*   **Throughput:** The number of requests the API can handle per second.
-*   **Error Rates:** The frequency of errors under load.
-*   **Resource Utilization:** How the API utilizes server resources (CPU, memory) during peak load.
-
-The `perf/tests/locustfile.py` defines the user behavior and load patterns for these tests.
