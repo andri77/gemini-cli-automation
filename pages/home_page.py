@@ -6,6 +6,7 @@ class HomePage:
         self.page = page
         self.for_schools_link = page.get_by_role("link", name="For schools").first
         self.privacy_policy_link = page.locator("//div[@class='divcopyright']//a[normalize-space()='Privacy policy']")
+        self.results_and_reports_link = page.get_by_role("link", name="Results and reports").first
 
     def navigate(self):
         self.page.goto("https://www.nap.edu.au/naplan/public-demonstration-site")
@@ -15,3 +16,6 @@ class HomePage:
 
     def get_privacy_policy_link_href(self):
         return self.privacy_policy_link.get_attribute("href")
+
+    def click_results_and_reports_link(self):
+        self.results_and_reports_link.click()
