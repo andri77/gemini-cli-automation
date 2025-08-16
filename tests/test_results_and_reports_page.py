@@ -8,6 +8,6 @@ def test_naplan_results_link(page: Page):
     home_page.click_results_and_reports_link()
 
     results_and_reports_page = ResultsAndReportsPage(page)
-    results_and_reports_page.click_naplan_results_link()
-
     expect(results_and_reports_page.naplan_results_link).to_be_visible()
+    results_and_reports_page.click_naplan_results_link()
+    expect(page.locator("[name='national']")).to_be_in_viewport()
