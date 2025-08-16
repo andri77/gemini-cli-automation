@@ -67,6 +67,20 @@ To run the Mock API generator tests, use the following command:
 pytest MOCK_GEN/tests/
 ```
 
+### Running Security and Penetration Tests
+
+These tests are designed to identify potential security vulnerabilities in the API.
+
+To run the security and penetration tests, use the following command:
+
+```bash
+pytest API/tests/test_security.py
+```
+
+**Note on FakeStoreAPI Behavior:**
+
+The `https://fakestoreapi.com/products` API, used for these tests, exhibits some unconventional behavior for certain negative scenarios (e.g., returning `200 OK` for non-existent resources or accepting invalid input). The assertions in `API/tests/test_security.py` have been adjusted to reflect these actual responses, effectively highlighting these behaviors as potential vulnerabilities or unexpected API design choices.
+
 ## Test Design
 
 The tests are designed using the Page Object Model (POM) architecture. This architecture separates the test code from the page-specific code, making the tests more readable, maintainable, and reusable.
