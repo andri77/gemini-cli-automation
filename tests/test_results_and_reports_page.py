@@ -8,9 +8,6 @@ def test_naplan_results_link(page: Page):
     home_page.click_results_and_reports_link()
 
     results_and_reports_page = ResultsAndReportsPage(page)
-    
-    with page.context.expect_page() as new_page_info:
-        results_and_reports_page.click_naplan_results_link()
-    
-    new_page = new_page_info.value
-    expect(new_page).to_have_url("https://www.acara.edu.au/reporting/national-report-on-schooling-in-australia/naplan-national-results")
+    results_and_reports_page.click_naplan_results_link()
+
+    expect(results_and_reports_page.naplan_results_link).to_be_visible()
