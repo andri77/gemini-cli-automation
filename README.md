@@ -31,16 +31,40 @@ This project contains Playwright tests for the NAPLAN public demonstration site.
 
 ## Running the tests
 
-To run the tests, use the following command:
+To run all the tests, use the following command:
 
 ```bash
 pytest
 ```
 
-To run the tests in headed mode, use the following command:
+### Running UI tests
+
+To run the UI tests, use the following command:
 
 ```bash
-pytest --headed
+pytest tests/
+```
+
+To run the UI tests in headed mode, use the following command:
+
+```bash
+pytest tests/ --headed
+```
+
+### Running API tests
+
+To run the API tests, use the following command:
+
+```bash
+pytest API/tests/
+```
+
+### Running Mock API generator tests
+
+To run the Mock API generator tests, use the following command:
+
+```bash
+pytest MOCK_GEN/tests/
 ```
 
 ## Test Design
@@ -63,3 +87,11 @@ graph TD
 - **Pages:** The pages are the actual web pages of the application under test.
 
 The tests use the page objects to interact with the pages and assert the expected behavior. This separation of concerns makes the tests more robust and easier to maintain.
+
+## API Tests
+
+The API tests are written using the `requests` library. They send requests to the API endpoints and assert the responses.
+
+## Mock API Generator
+
+The Mock API generator is a simple tool that can be used to generate mock APIs for testing purposes. It can generate mock responses for GET, POST, PUT, and DELETE requests.
