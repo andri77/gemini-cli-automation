@@ -122,20 +122,36 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
 
-    if report.when == "call" and hasattr(item, 'callspec') and ('page' in item.funcargs):
+    if report.when == "call" and hasattr(item, 'callspec'):
         # Check if it's a UI test
         if 'ui' in item.keywords:
-            page = item.funcargs.get('page')
-            screenshot_name = f"{item.name}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-            screenshot_path = os.path.join(_screenshot_dir, screenshot_name)
-            try:
-                page.screenshot(path=screenshot_path)
-                # Read the screenshot file and base64 encode it
-                with open(screenshot_path, "rb") as f:
-                    screenshot_data = f.read()
-                encoded_screenshot = base64.b64encode(screenshot_data).decode()
+            if 'page' in item.funcargs:
+                page = item.funcargs.get('page')
+                screenshot_name = f"{item.name}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                screenshot_path = os.path.join(_screenshot_dir, screenshot_name)
+                try:
+                    page.screenshot(path=screenshot_path)
+                    # Read the screenshot file and base64 encode it
+                    with open(screenshot_path, "rb") as f:
+                        screenshot_data = f.read()
+                    encoded_screenshot = base64.b64encode(screenshot_data).decode()
 
-                # Attach screenshot to the report
-                report.screenshot = encoded_screenshot # Attach to report object
-            except Exception as e:
-                print(f"Failed to take screenshot for {item.name}: {e}")
+                    # Attach screenshot to the report
+                    report.screenshot = encoded_screenshot # Attach to report object
+                except Exception as e:
+                    print(f"Failed to take screenshot for {item.name}: {e}")
+            elif 'visual_page' in item.funcargs:
+                page = item.funcargs.get('visual_page').page
+                screenshot_name = f"{item.name}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                screenshot_path = os.path.join(_screenshot_dir, screenshot_name)
+                try:
+                    page.screenshot(path=screenshot_path)
+                    # Read the screenshot file and base64 encode it
+                    with open(screenshot_path, "rb") as f:
+                        screenshot_data = f.read()
+                    encoded_screenshot = base64.b64encode(screenshot_data).decode()
+
+                    # Attach screenshot to the report
+                    report.screenshot = encoded_screenshot # Attach to report object
+                except Exception as e:
+                    print(f"Failed to take screenshot for {item.name}: {e}")
