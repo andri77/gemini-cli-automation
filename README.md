@@ -12,6 +12,7 @@ This project contains Playwright tests for the NAPLAN public demonstration site,
     *   [Running Mock API Generator Tests](#running-mock-api-generator-tests)
     *   [Running Security and Penetration Tests](#running-security-and-penetration-tests)
     *   [Running Performance Tests](#running-performance-tests)
+    *   [Running Visual Regression Tests](#running-visual-regression-tests)
 *   [Test Design](#test-design)
     *   [Flow Diagram](#flow-diagram)
     *   [Explanation](#explanation)
@@ -20,6 +21,8 @@ This project contains Playwright tests for the NAPLAN public demonstration site,
 *   [Mock API Generator](#mock-api-generator)
 *   [Security and Penetration Tests](#security-and-penetration-tests)
 *   [Performance Tests](#performance-tests)
+*   [Visual Regression Testing with Applitools](#visual-regression-testing-with-applitools)
+    *   [Visual Regression Testing Design](#visual-regression-testing-design)
 
 ## Installation
 
@@ -140,6 +143,26 @@ To run the performance tests:
 
 3.  Open your web browser and go to `http://localhost:8089` to access the Locust web UI. From there, you can start the test by specifying the number of users and the spawn rate.
 
+### Running Visual Regression Tests
+
+Visual regression tests use Applitools to capture and compare screenshots of the application's UI to detect any unexpected visual changes. To run these tests, you need to have an Applitools account and an API key.
+
+1.  **Set the Applitools API Key:**
+
+    You can set your Applitools API key as an environment variable:
+
+    ```bash
+    export APPLITOOLS_API_KEY="YOUR_APPLITOOLS_API_KEY"
+    ```
+
+    Alternatively, you can create a file named `applitools.key` in the root directory of the project and add your API key to it.
+
+2.  **Run the tests:**
+
+    ```bash
+    pytest tests/
+    ```
+
 ## Test Design
 
 The tests are designed using the Page Object Model (POM) architecture. This architecture separates the test code from the page-specific code, making the tests more readable, maintainable, and reusable.
@@ -172,3 +195,18 @@ API tests focus on the backend services of the application. They directly send r
 ## Mock API Generator
 
 The Mock API generator is a simple tool that can be used to generate mock APIs for testing purposes. It allows developers and testers to simulate API responses, enabling frontend and backend development to proceed in parallel without waiting for actual API implementations. It can generate mock responses for GET, POST, PUT, and DELETE requests.
+
+## Visual Regression Testing with Applitools
+
+This project uses Applitools for visual regression testing. Applitools captures screenshots of the application and compares them to baseline images to identify any unintended visual changes. This helps to prevent layout bugs and ensure a consistent user experience.
+
+To use Applitools, you need to have an account and an API key. You can get a free account on the [Applitools website](https://applitools.com/).
+
+Once you have an API key, you can set it as an environment variable or create a file named `applitools.key` in the root directory of the project and add your API key to it. The tests will then automatically capture screenshots and send them to the Applitools dashboard for comparison.
+
+### Visual Regression Testing Design
+
+*   **Base Page:** The `VisualBasePage` class in `tests/visual/visual_base_page.py` is the base class for all visual tests. It contains the basic setup for Applitools, such as initializing the Eyes object and opening a new test session.
+*   **Test Fixture:** The `visual_page` fixture in `tests/test_home_page.py` is a pytest fixture that initializes the `VisualBasePage` and opens a new test session. It is used in each test function to take a screenshot of the page.
+*   **Test Functions:** The test functions in `tests/test_home_page.py` use the `visual_page` fixture to take a screenshot of the page. The `eyes.check` method is used to take a screenshot of the current page and send it to the Applitools dashboard for comparison.
+*   **Applitools Dashboard:** The Applitools dashboard is used to review the visual differences between the baseline and the current screenshots. If the differences are expected, you can accept the new screenshots as the baseline. This will update the baseline images and resolve the `DiffsFoundError`.
