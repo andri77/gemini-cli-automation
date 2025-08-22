@@ -5,9 +5,34 @@ import os
 import shutil
 import datetime
 import base64
+from pytest import StashKey
+from applitools.playwright import Eyes, Target
+
+_test_results_by_type_key = StashKey[dict]()
 
 # Global variable to store the screenshot directory
 _screenshot_dir = None
+
+@pytest.fixture(scope="function")
+def eyes(page, request):
+    eyes = Eyes()
+    try:
+        with open("applitools.key", "r") as f:
+            eyes.api_key = f.read().strip()
+    except FileNotFoundError:
+        print("ERROR: applitools.key file not found. Please create this file and add your Applitools API key to it.")
+        pytest.exit("Aborting tests: Applitools API key not found.")
+
+    eyes.save_diffs = True
+    eyes.diffs_path = "tests/visual/diff"
+
+    eyes.open(
+        driver=page,
+        app_name="Gemini CLI Automation",
+        test_name=request.node.name,
+    )
+    yield eyes
+    eyes.close(raise_ex=False)
 
 def pytest_sessionstart(session):
     """
@@ -77,12 +102,14 @@ def pytest_html_results_table_row(report, cells):
             test_type = "API"
         elif 'ui' in report.keywords:
             test_type = "UI"
+        elif 'visual' in report.keywords:
+            test_type = "Visual"
         elif 'performance' in report.keywords:
             test_type = "Performance"
     cells.insert(1, test_type)
 
     # Add screenshot column for UI tests
-    if 'ui' in report.keywords and hasattr(report, 'screenshot'):
+    if ('ui' in report.keywords) and hasattr(report, 'screenshot'):
         cells.append(html.td(html.img(src=f"data:image/png;base64,{report.screenshot}", style="width:200px;height:auto;")))
     else:
         cells.append(html.td("")) # Empty cell for non-UI tests or no screenshot
@@ -95,10 +122,10 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
 
-    if report.when == "call" and hasattr(item, 'callspec') and 'page' in item.funcargs:
+    if report.when == "call" and hasattr(item, 'callspec') and ('page' in item.funcargs):
         # Check if it's a UI test
         if 'ui' in item.keywords:
-            page = item.funcargs['page']
+            page = item.funcargs.get('page')
             screenshot_name = f"{item.name}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
             screenshot_path = os.path.join(_screenshot_dir, screenshot_name)
             try:
