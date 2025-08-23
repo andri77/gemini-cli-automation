@@ -15,7 +15,7 @@ def test_for_schools_link(page: Page, visual_page: VisualBasePage):
     home_page = HomePage(page)
     home_page.navigate()
     home_page.click_for_schools_link()
-    expect(page).to_have_url("https://www.nap.edu.au/default.aspx?aspxerrorpath=/naplan/for-schools")
+    expect(page).to_have_url("https://www.nap.edu.au/naplan/for-schools")
     visual_page.check("For Schools Page", Target.window().fully())
 
 def test_privacy_policy_link(page: Page, visual_page: VisualBasePage):
