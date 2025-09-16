@@ -61,6 +61,22 @@ To run all the tests (UI, API, Mock API Generator, Security, and Performance), u
 pytest
 ```
 
+### Running Tests in Parallel
+
+To run the tests in parallel, you can use the `pytest-xdist` plugin. This plugin allows you to run tests across multiple CPUs, which can significantly reduce the test execution time.
+
+To run the tests in parallel with 2 workers, use the following command:
+
+```bash
+pytest -n 2
+```
+
+You can also specify the browsers to run the tests on:
+
+```bash
+pytest -n 2 --browser chromium --browser firefox
+```
+
 ### Running UI Tests
 
 UI tests interact with the web application through a browser to simulate user behavior. They verify the functionality and appearance of the user interface.
