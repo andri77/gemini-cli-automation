@@ -5,8 +5,11 @@ This project contains Playwright tests for the NAPLAN public demonstration site,
 ## Table of Contents
 
 *   [Installation](#installation)
+    *   [Create and Activate Virtual Environment](#create-and-activate-virtual-environment)
 *   [Running Tests](#running-tests)
     *   [Running All Tests](#running-all-tests)
+    *   [Running Tests in Parallel](#running-tests-in-parallel)
+    *   [Custom Command Shell Scripts](#custom-command-shell-scripts)
     *   [Running UI Tests](#running-ui-tests)
     *   [Running API Tests](#running-api-tests)
     *   [Running Mock API Generator Tests](#running-mock-api-generator-tests)
@@ -78,6 +81,20 @@ You can also specify the browsers to run the tests on:
 ```bash
 pytest -n 2 --browser chromium --browser firefox
 ```
+
+### Custom Command Shell Scripts
+
+To simplify running tests with specific configurations, you can use the provided shell scripts:
+
+*   **Run Headed Parallel Tests:**
+    ```bash
+    ./run_headed_tests.sh
+    ```
+
+*   **Run Headless Parallel Tests:**
+    ```bash
+    ./run_headless_tests.sh
+    ```
 
 ### Running UI Tests
 
