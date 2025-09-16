@@ -26,17 +26,14 @@ This project contains Playwright tests for the NAPLAN public demonstration site,
 
 ## Installation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/gemini-cli-automation/playwright-mpc-tests.git
-    ```
+### Create and Activate Virtual Environment
 
-2.  **Create a virtual environment:**
+1.  **Create a virtual environment:**
     ```bash
     python -m venv venv
     ```
 
-3.  **Activate the virtual environment:**
+2.  **Activate the virtual environment:**
     -   **Windows:
         ```bash
         venv\Scripts\activate
@@ -46,9 +43,14 @@ This project contains Playwright tests for the NAPLAN public demonstration site,
         source venv/bin/activate
         ```
 
-4.  **Install the dependencies:**
+3.  **Install the dependencies:**
     ```bash
     pip install -r requirements.txt
+    ```
+
+4.  **Install Playwright browsers:**
+    ```bash
+    playwright install
     ```
 
 ## Running Tests
@@ -225,4 +227,4 @@ Once you have an API key, you can set it as an environment variable or create a 
 *   **Base Page:** The `VisualBasePage` class in `tests/visual/visual_base_page.py` is the base class for all visual tests. It contains the basic setup for Applitools, such as initializing the Eyes object and opening a new test session.
 *   **Test Fixture:** The `visual_page` fixture in `tests/test_home_page.py` is a pytest fixture that initializes the `VisualBasePage` and opens a new test session. It is used in each test function to take a screenshot of the page.
 *   **Test Functions:** The test functions in `tests/test_home_page.py` use the `visual_page` fixture to take a screenshot of the page. The `eyes.check` method is used to take a screenshot of the current page and send it to the Applitools dashboard for comparison.
-*   **Applitools Dashboard:** The Applitools dashboard is used to review the visual differences between the baseline and the current screenshots. If the differences are expected, you can accept the new screenshots as the baseline. This will update the baseline images and resolve the `DiffsFoundError`.
+*   **Applitools Dashboard:** The Applitools dashboard is used to review the visual differences between the baseline and the current screenshots. If the differences are expected, you can accept the new screenshots as the baseline. This will update the baseline images and resolve the `DiffsFoundError`.eenshots as the baseline. This will update the baseline images and resolve the `DiffsFoundError`.
