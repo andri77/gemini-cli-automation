@@ -3,8 +3,3 @@ screenshots/
 reports/
 node_modules/
 applitools.key
-__pycache__/
-*.pyc
-test-results/
-
-applitools.key
