@@ -13,26 +13,7 @@ _test_results_by_type_key = StashKey[dict]()
 # Global variable to store the screenshot directory
 _screenshot_dir = None
 
-@pytest.fixture(scope="function")
-def eyes(page, request):
-    eyes = Eyes()
-    try:
-        with open("applitools.key", "r") as f:
-            eyes.api_key = f.read().strip()
-    except FileNotFoundError:
-        print("ERROR: applitools.key file not found. Please create this file and add your Applitools API key to it.")
-        pytest.exit("Aborting tests: Applitools API key not found.")
 
-    eyes.save_diffs = True
-    eyes.diffs_path = "tests/visual/diff"
-
-    eyes.open(
-        driver=page,
-        app_name="Gemini CLI Automation",
-        test_name=request.node.name,
-    )
-    yield eyes
-    eyes.close(raise_ex=False)
 
 def pytest_sessionstart(session):
     """

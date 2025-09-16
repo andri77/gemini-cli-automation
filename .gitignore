@@ -1,4 +1,10 @@
+venv/
+screenshots/
+reports/
+node_modules/
+applitools.key
 __pycache__/
 *.pyc
-screenshots/
 test-results/
+
+applitools.key

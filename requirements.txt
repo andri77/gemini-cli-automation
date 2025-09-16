@@ -4,4 +4,3 @@ pytest-html
 locust
 py
 jsonschema
-eyes-playwright
