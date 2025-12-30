@@ -80,6 +80,7 @@ You can also specify the browsers to run the tests on:
 
 ```bash
 pytest -n 2 --browser chromium --browser firefox
+./venv/bin/pytest tests/ --browser chromium -v
 ```
 
 ### Custom Command Shell Scripts

@@ -30,7 +30,7 @@ def test_myschool_logo_visibility_and_navigation(page: Page):
     with page.context.expect_page() as new_page_info:
         home_page.myschool_logo.click()
     new_page = new_page_info.value
-    expect(new_page).to_have_url("https://www.myschool.edu.au/")
+    expect(new_page).to_have_url("https://myschool.edu.au/")
 
 def test_australian_curriculum_logo_visibility_and_navigation(page: Page):
     home_page = HomePage(page)
